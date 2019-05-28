@@ -26,8 +26,8 @@ public class Person {
     /**
      * Constructor that initializes all data.
      *
-     * @param firstName string representing the persons first name
-     * @param lastName string representing the persons last name
+     * @param firstName String representing the persons first name
+     * @param lastName String representing the persons last name
      */
     public Person(String firstName, String lastName) {
         this.firstName = new SimpleStringProperty(firstName);

@@ -41,6 +41,7 @@ public class App extends Application {
 
     /**
      * Method called by default to start the application.
+     *
      * @param primaryStage the Stage object where the scene's will be displayed
      */
     @Override
@@ -95,6 +96,7 @@ public class App extends Application {
 
     /**
      * Returns the main stage.
+     *
      * @return the primary Stage object where the scenes will be displayed
      */
     public Stage getPrimaryStage() {
@@ -103,6 +105,7 @@ public class App extends Application {
 
     /**
      * Returns the Person's data as an observable list.
+     *
      * @return an observable list of the Person's data.
      */
     public ObservableList<Person> getPersonData() {
