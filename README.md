@@ -1,2 +1,6 @@
 # Contacts
-Simple contact application developed in Java 12 using JavaFX 12 + Maven
+Contacts is a simple application for managing and viewing peoples contact information.
+
+Contacts was developed using the OpenJDK 12 and utilizes JavaFX 12.0.1 for the front-end & Maven for
+project management.
+
