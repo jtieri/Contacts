@@ -33,7 +33,7 @@ public class Person {
         this.firstName = new SimpleStringProperty(firstName);
         this.lastName = new SimpleStringProperty(lastName);
 
-        // TODO remove dummy data
+        // TODO remove hard-coded data
         this.street = new SimpleStringProperty("some street");
         this.postalCode = new SimpleIntegerProperty(1234);
         this.city = new SimpleStringProperty("some city");

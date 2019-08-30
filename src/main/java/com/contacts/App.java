@@ -8,6 +8,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -20,29 +21,19 @@ public class App extends Application {
     private Stage primaryStage;
     private BorderPane rootLayout;
 
-    private ObservableList<Person> personData = FXCollections.observableArrayList(); // Observable list of Persons.
+    private ObservableList<Person> personData = FXCollections.observableArrayList();
 
     /**
      * Main application constructor.
      */
     public App() {
-        // Add some sample data
-        personData.add(new Person("Hans", "Muster"));
-        personData.add(new Person("Ruth", "Mueller"));
-        personData.add(new Person("Heinz", "Kurz"));
-        personData.add(new Person("Cornelia", "Meier"));
-        personData.add(new Person("Werner", "Meyer"));
-        personData.add(new Person("Lydia", "Kunz"));
-        personData.add(new Person("Anna", "Best"));
-        personData.add(new Person("Stefan", "Meier"));
-        personData.add(new Person("Martin", "Mueller"));
+
     }
 
-
     /**
-     * Method called by default to start the application.
+     * Default method called to start the application.
      *
-     * @param primaryStage the Stage object where the scene's will be displayed
+     * @param primaryStage the Stage object where the UI components will be displayed.
      */
     @Override
     public void start(Stage primaryStage) {
@@ -55,7 +46,7 @@ public class App extends Application {
     }
 
     /**
-     * Initializes the root layout.
+     * Initializes the root layout, which is the primary scene containing the menu bar and person overview.
      */
     private void initRootLayout() {
         try {
@@ -63,7 +54,6 @@ public class App extends Application {
             loader.setLocation(App.class.getResource("/RootLayout.fxml"));
             rootLayout = loader.load();
 
-            // Display the root layout of the application.
             Scene scene = new Scene(rootLayout);
             primaryStage.setScene(scene);
             primaryStage.show();
@@ -82,12 +72,11 @@ public class App extends Application {
             loader.setLocation(App.class.getResource("/PersonOverview.fxml"));
             AnchorPane personOverview = loader.load();
 
-            // Set person overview into the center of root layout.
             rootLayout.setCenter(personOverview);
 
-            // Give the controller access to the main app.
+            // Give the controller access to the main application for handling buttons and displaying content.
             PersonOverviewController controller = loader.getController();
-            controller.setMainApp(this);
+            controller.setApplication(this);
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -95,7 +84,42 @@ public class App extends Application {
     }
 
     /**
-     * Returns the main stage.
+     * Opens a dialog box used for editing the currently selected person.
+     * If the user clicks OK, the changes are saved into the provided person object and true
+     * is returned.
+     *
+     * @param person the person object to be edited
+     * @return true if the user clicked OK, false otherwise.
+     */
+    public boolean showPersonEditDialog(Person person) {
+        try {
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(App.class.getResource("/PersonEditDialog.fxml"));
+            AnchorPane page = (AnchorPane) loader.load();
+
+            Stage dialogStage = new Stage();
+            dialogStage.setTitle("Edit Person");
+            dialogStage.initModality(Modality.WINDOW_MODAL);
+            dialogStage.initOwner(primaryStage);
+            Scene scene = new Scene(page);
+            dialogStage.setScene(scene);
+
+            PersonEditDialogController controller = loader.getController();
+            controller.setDialogStage(dialogStage);
+            controller.setPerson(person);
+
+            dialogStage.showAndWait();
+
+            return controller.isOkClicked();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    /**
+     * Returns the primary stage.
      *
      * @return the primary Stage object where the scenes will be displayed
      */

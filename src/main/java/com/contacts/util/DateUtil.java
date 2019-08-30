@@ -29,7 +29,7 @@ public class DateUtil {
      * @param dateString the date represented as a String
      * @return a LocalDate object or null if the String could not be properly parsed
      */
-    private static LocalDate parse(String dateString) {
+    public static LocalDate parse(String dateString) {
         try {
             return DATE_FORMATTER.parse(dateString, LocalDate::from);
         } catch (DateTimeParseException e) {

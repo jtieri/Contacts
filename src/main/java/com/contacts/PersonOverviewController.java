@@ -8,8 +8,10 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 
+/**
+ * Controller class used for facilitating the person overview layout within the UI
+ */
 public class PersonOverviewController {
-
     @FXML
     private TableView<Person> personTable;
     @FXML
@@ -30,7 +32,7 @@ public class PersonOverviewController {
     @FXML
     private Label birthdayLabel;
 
-    private App mainApp; // Reference to the main application.
+    private App application;
 
     /**
      * Default constructor, called before the initialize() method.
@@ -90,7 +92,7 @@ public class PersonOverviewController {
             personTable.getItems().remove(selectedIndex);
         } else {
             Alert alert = new Alert(Alert.AlertType.WARNING);
-            alert.initOwner(mainApp.getPrimaryStage());
+            alert.initOwner(application.getPrimaryStage());
             alert.setTitle("Warning");
             alert.setHeaderText("No Entry Selected");
             alert.setContentText("Please select a person in the table before attempting to delete an entry.");
@@ -100,13 +102,54 @@ public class PersonOverviewController {
     }
 
     /**
+     * Called when the user clicks the new button. Opens a dialog to edit
+     * details for a new person.
+     */
+    @FXML
+    private void handleNewPerson() {
+        Person tempPerson = new Person();
+        final boolean okClicked = application.showPersonEditDialog(tempPerson);
+
+        if (okClicked) {
+            application.getPersonData().add(tempPerson);
+        }
+    }
+
+    /**
+     * Called when the user clicks the edit button. Opens a dialog to edit
+     * details for the selected person.
+     */
+    @FXML
+    private void handleEditPerson() {
+        Person selectedPerson = personTable.getSelectionModel().getSelectedItem();
+
+        if (selectedPerson != null) {
+            final boolean okClicked = application.showPersonEditDialog(selectedPerson);
+
+            if (okClicked) {
+                showPersonDetails(selectedPerson);
+            }
+
+        } else {
+            // Nothing selected.
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.initOwner(application.getPrimaryStage());
+            alert.setTitle("No Selection");
+            alert.setHeaderText("No Person Selected");
+            alert.setContentText("Please select a person in the table.");
+
+            alert.showAndWait();
+        }
+    }
+
+    /**
      * Provides the main application with a reference to itself.
      *
-     * @param mainApp a reference to the main application
+     * @param application a reference to the main application
      */
-    void setMainApp(App mainApp) {
-        this.mainApp = mainApp;
+    void setApplication(App application) {
+        this.application = application;
 
-        personTable.setItems(mainApp.getPersonData()); // Add observable list data to the table
+        personTable.setItems(application.getPersonData()); // Add observable list data to the table
     }
 }
